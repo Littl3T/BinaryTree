@@ -11,6 +11,7 @@ def insert(root, key):
         root.right = insert(root.right, key)
     elif key < root.value:
         root.left = insert(root.left, key)
+    root = balance_tree(root)
     return root
 
 def insert_values(root, values):
@@ -42,6 +43,35 @@ def balance(node):
         B = height(L) + 1
     return B
 
+def rotate_right(node):
+    A = node
+    B = node.left
+    t = B.right
+    B.right = A
+    A.left = t
+    return B
+
+def rotate_left(node):
+    A = node
+    B = node.right
+    t = B.left
+    B.left = A
+    A.right = t
+    return B
+
+def balance_tree(root:object):
+    if balance(root) >1:
+        if balance(root.left) >1 or balance(root.left) <-1:
+            balance_tree(root.left)
+        else:
+            root = rotate_right(root)
+    if balance(root) <-1:
+        if balance(root.right) >1 or balance(root.right) <-1:
+            balance_tree(root.right)
+        else:
+            root = rotate_left(root)
+    return root
+    
 
 def print2DTree(root, space=0, LEVEL_SPACE = 5):
     if (root == None): return
@@ -53,8 +83,7 @@ def print2DTree(root, space=0, LEVEL_SPACE = 5):
     print2DTree(root.left, space)
 
 
-root = insert_values(None, [2,1,3])
-print2DTree(root) 
-
-print(height(root))
-print(balance(root))
+root = insert_values(None, [0,1,2,3,4,5,6,7,8,9,10,11])
+print("-"*10)
+print("Balance of the root: ", balance(root))
+print2DTree(root)
